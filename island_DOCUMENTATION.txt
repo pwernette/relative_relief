@@ -1,7 +1,8 @@
-Copyright 2015 by Phillipe Wernette
-Email: wernett9@tamu.edu
-Texas A&M University, Department of Geography
-College Station, Texas 77843
+Copyright 2021
+
+Phillipe Wernette
+pwernette@usgs.gov
+US Geological Survey
 
 The purpose of this program is to import a DEM; extract beach, dune, and island topological features; and compute landform width and volume.
 
