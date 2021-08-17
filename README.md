@@ -18,9 +18,9 @@ or
 g++ *.cpp -lm -O2 -static -o programname.exe
 ```
 
-The second compiling option will create a static stand-alone program which may be transferred from one device to another while maintaining function. **NOTE: Compiling with ```relative_relief.cpp``` will not work since data_structures.cpp is not also compiled in the process.**
+The second compiling option will create a static stand-alone program which may be transferred from one device to another while maintaining function. **NOTE: Compiling with** ```relative_relief.cpp``` **will not work since data_structures.cpp is not also compiled in the process.**
 
-### Purpose and Function
+## Purpose and Function
 
 This program functions by (1) importing an ENVI format DEM (.dat and .h file), (2) computing relative relief across 3 spatial scales, and (3) (OPTIONAL) extracting beach, dune, and island landscape features, and computing landform morphometrics (i.e. height, width, volume) from these landscape features.
 
@@ -37,6 +37,8 @@ Landform morphometrics (*i.e.* dune toe, dune crest, dune heel, and all addition
 ![Planview map of where landform morphometrics from this paper](/images/Figure5.png)
 
 ![Profile view of where landform morphometrics from this paper align with other approaches](/images/Figure6.png)
+
+## Inputs
 
 The program requires the following inputs:
 
@@ -57,7 +59,8 @@ The program requires the following inputs:
 		both --> output both ascii and ENVI files
 
 
-Defaults:
+## Defaults
+
 The default thresholds are as follows:
 	
 	- Shoreline:    0.02 masl
@@ -68,12 +71,14 @@ The default thresholds are as follows:
 
 Any of the default values can be changed by altering the ```params_rr.ini``` file that accompanies this program.
 
-Example Usage:
+## Example Usage
 ```
 program sample_ENVI_raster_filename 25 all both
 
 program.exe sample_ENVI_raster_filename 25 all both
 ```
+
+## Questions and Feedback
 
 This program was developed by Phil Wernette as part of his PhD Thesis from 2017 ("Assessing the Role of Framework Geology on Barrier Island Geomorphology") and *Geomorphology* paper from 2016 (Wernette, P., C. Houser, and M.P. Bishop. (2016) An automated approach for extracting barrier island morphology from digital elevation models. Geomorphology, 262(1), 1-7. http://doi.org/10.1016/j.geomorph.2016.02.024.)
 
