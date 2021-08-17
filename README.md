@@ -4,7 +4,7 @@ This program implements the approach detailed in:
 
 > Wernette, P., C. Houser, and M.P. Bishop. (2016) An automated approach for extracting barrier island morphology from digital elevation models. Geomorphology, 262(1), 1-7. http://doi.org/10.1016/j.geomorph.2016.02.024.
 
-![Graphical abstract from *Geomorphology* paper](images/Figure 1 with profiles.png)
+![Graphical abstract from *Geomorphology* paper](/images/Figure1withprofiles.png)
 
 The purpose of this program is to:
 
@@ -13,15 +13,20 @@ The purpose of this program is to:
 	3. compute landform morphometrics (i.e. height, width, volume).
 
 It works by computing the relative relief of every pixel in the input DEM using a 2D moving window that is specified by the ```params_rr.ini``` file.
-![Side profile (1D) profile of a transect through a 2D moving window](images/Figure 2.png)
+
+![Side profile (1D) profile of a transect through a 2D moving window](/images/Figure2.png)
 
 The 2D window size will significant affect the ability to extract different landform morphometrics and subsequent landforms.
-![Effect of 2D moving window size on relative relief values](images/Figure 3 with DI.png)
+
+![Effect of 2D moving window size on relative relief values](/images/Figure3withDI.png)
 
 Landform morphometrics (*i.e.* dune toe, dune crest, dune heel, and all additional derivatives) are extracted along transects of the 2D computed relative relief values.
-![Planview map of where landform morphometrics from this paper](images/Figure 5.png)
-![Planview map of profiles used in next figure](images/Figure 1 with profiles.png)
-![Profile view of where landform morphometrics from this paper align with other approaches](images/Figure 6.png)
+
+![Planview map of where landform morphometrics from this paper](/images/Figure5.png)
+
+![Planview map of profiles used in next figure](/images/Figure1withprofiles.png)
+
+![Profile view of where landform morphometrics from this paper align with other approaches](/images/Figure6.png)
 
 The program requires the following inputs:
 
