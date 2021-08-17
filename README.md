@@ -4,7 +4,7 @@ This program implements the approach detailed in:
 
 > Wernette, P., C. Houser, and M.P. Bishop. (2016) An automated approach for extracting barrier island morphology from digital elevation models. Geomorphology, 262(1), 1-7. http://doi.org/10.1016/j.geomorph.2016.02.024.
 
-![Graphical abstract from *Geomorphology* paper](/images/Figure1withprofiles.png)
+![Graphical abstract from *Geomorphology* paper](/images/featureextractiongraphicalabstract.png)
 
 The purpose of this program is to:
 
