@@ -60,7 +60,6 @@ public:
 	void writeDAT(string fn, vector<unsigned int> outdat);
 	void writeDAT(string fn, vector<int> outdat);
 	void writeDAT(string fn, vector<long int> outdat);
-	void writeDAT(string fn, vector<float> outdat);
 	void writeDAT(string fn, vector<double> outdat);
 
 	//function to write header file
@@ -68,7 +67,6 @@ public:
 	void writeHDR(string fn, vector<unsigned int> outinfo);
 	void writeHDR(string fn, vector<int> outinfo);
 	void writeHDR(string fn, vector<long int> outinfo);
-	void writeHDR(string fn, vector<float> outinfo);
 	void writeHDR(string fn, vector<double> outinfo);
 };
 
@@ -170,7 +168,7 @@ public:
 
 	bool readDAT(string Fname, Header hdr);
 
-	void writeENVIs(string filename, Header hdr);
+	void writeENVIs(string filename, Header hdr, Params pm);
 
 	void computeRelativeRelief(int i, int j, int buf, Header hdr);
 };

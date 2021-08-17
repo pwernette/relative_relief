@@ -1,4 +1,4 @@
-# Relative Relief
+# Relative Relief and Automated Barrier Island Landform Feature Extraction from DEMs
 
 This program implements the approach detailed in:
 
@@ -6,11 +6,23 @@ This program implements the approach detailed in:
 
 ![Graphical abstract from *Geomorphology* paper](/images/featureextractiongraphicalabstract.png)
 
-The purpose of this program is to:
+## Compiling
 
-	1. import a ENVI format DEM (.dat and .h file)
-	2. extract beach, dune, and island landforms/features, and
-	3. compute landform morphometrics (i.e. height, width, volume).
+This code can be compiled as follows:
+
+```
+g++ *.cpp -lm -O2 -o programname.exe
+```
+or
+```
+g++ *.cpp -lm -O2 -static -o programname.exe
+```
+
+The second compiling option will create a static stand-alone program which may be transferred from one device to another while maintaining function. **NOTE: Compiling with ```relative_relief.cpp``` will not work since data_structures.cpp is not also compiled in the process.**
+
+### Purpose and Function
+
+This program functions by (1) importing an ENVI format DEM (.dat and .h file), (2) computing relative relief across 3 spatial scales, and (3) (OPTIONAL) extracting beach, dune, and island landscape features, and computing landform morphometrics (i.e. height, width, volume) from these landscape features.
 
 Relative relief (RR) of every pixel in the input DEM is first computed \***using a 2D moving window**\*, where the window size is specified by the ```params_rr.ini``` file.
 

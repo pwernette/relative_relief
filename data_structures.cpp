@@ -506,11 +506,11 @@ bool Raster::readDAT(string fn, Header hdr){
 
 	if(hdr.datatype == 4){
 		f.read(reinterpret_cast<char*> (Raster::z.data()), Raster::z.size()*sizeof(float));
-		
+
 		for(s=0; s<hdr.nlines; s++){
 			for(t=0; t<hdr.ncols; t++){
 				idx = s*hdr.ncols + t;
-				
+
 				Raster::x[idx] = hdr.ulx + t*hdr.xres;
 				Raster::y[idx] = hdr.uly - s*hdr.yres;
 
@@ -547,7 +547,7 @@ bool Raster::readDAT(string fn, Header hdr){
 }
 
 void Raster::writeENVIs(string filename, Header hdr, Params pm){
-	if(pm.oProduct.compare("shoreline")==0 || prms.oProduct.compare("all")==0){
+	if(pm.oProduct.compare("shoreline")==0 || pm.oProduct.compare("all")==0){
 		///////////////
 		// SHORELINE //
 		///////////////
@@ -558,78 +558,78 @@ void Raster::writeENVIs(string filename, Header hdr, Params pm){
 		hdr.writeHDR(tmpname, Raster::shoreline);
 		hdr.writeDAT(tmpname, Raster::shoreline);
 	}
-	if(pm.oProduct.compare("dunetoe")==0 || prms.oProduct.compare("all")==0){
+	if(pm.oProduct.compare("dunetoe")==0 || pm.oProduct.compare("all")==0){
 		//////////////
 		// DUNE TOE //
 		//////////////
-		tmpname = filename;
+		string tmpname = filename;
 		tmpname.append("_dune_toe");
 
 		// write out dune toe ENVI raster
 		hdr.writeHDR(tmpname, Raster::dune_toe_line);
 		hdr.writeDAT(tmpname, Raster::dune_toe_line);
 	}
-	if(pm.oProduct.compare("dunecrest")==0 || prms.oProduct.compare("all")==0){
+	if(pm.oProduct.compare("dunecrest")==0 || pm.oProduct.compare("all")==0){
 		////////////////
 		// DUNE RIDGE //
 		////////////////
-		tmpname = filename;
+		string tmpname = filename;
 		tmpname.append("_dune_crest");
-		
+
 		// write out dune crest ENVI raster
 		hdr.writeHDR(tmpname, Raster::dune_ridge_line);
 		hdr.writeDAT(tmpname, Raster::dune_ridge_line);
 	}
-	if(pm.oProduct.compare("duneheel")==0 || prms.oProduct.compare("all")==0){
+	if(pm.oProduct.compare("duneheel")==0 || pm.oProduct.compare("all")==0){
 		///////////////
 		// DUNE HEEL //
 		///////////////
-		tmpname = filename;
+		string tmpname = filename;
 		tmpname.append("_dune_heel");
-		
+
 		// write out dune heel ENVI raster
 		hdr.writeHDR(tmpname, Raster::dune_heel_line);
 		hdr.writeDAT(tmpname, Raster::dune_heel_line);
 	}
-	if(pm.oProduct.compare("backbarrier")==0 || prms.oProduct.compare("all")==0){
+	if(pm.oProduct.compare("backbarrier")==0 || pm.oProduct.compare("all")==0){
 		///////////////////////////
 		// BACKBARRIER SHORELINE //
 		///////////////////////////
-		tmpname = filename;
+		string tmpname = filename;
 		tmpname.append("_backbarrier_shoreline");
 
 		// write out back barrier shoreline ENVI raster
 		hdr.writeHDR(tmpname, Raster::backbarrier_line);
 		hdr.writeDAT(tmpname, Raster::backbarrier_line);
 	}
-	if(pm.oProduct.compare("rr")==0 || prms.oProduct.compare("all")==0){
+	if(pm.oProduct.compare("rr")==0 || pm.oProduct.compare("all")==0){
 		/////////////////////
 		// RELATIVE RELIEF //
 		/////////////////////
-		tmpname = filename;
-		tmpname.append("_rr"+to_string(windowsize));
-		
+		string tmpname = filename;
+		tmpname.append("_rr"+to_string(pm.iWindowSize));
+
 		// write out relative relief ENVI rasters
 		hdr.writeHDR(tmpname, Raster::res);
 		hdr.writeDAT(tmpname, Raster::res);
-		
+
 		tmpname = filename;
-		tmpname.append("_rr"+to_string(windowsize+2));
-		
+		tmpname.append("_rr"+to_string(pm.iWindowSize+2));
+
 		// write out relative relief ENVI rasters
 		hdr.writeHDR(tmpname, Raster::res_plus1);
 		hdr.writeDAT(tmpname, Raster::res_plus1);
-		
+
 		tmpname = filename;
-		tmpname.append("_rr"+to_string(windowsize+4));
-		
+		tmpname.append("_rr"+to_string(pm.iWindowSize+4));
+
 		// write out relative relief ENVI rasters
 		hdr.writeHDR(tmpname, Raster::res_plus2);
 		hdr.writeDAT(tmpname, Raster::res_plus2);
 
 		tmpname = filename;
 		tmpname.append("_rr_avg");
-		
+
 		// write out average relative relief ENVI raster
 		hdr.writeHDR(tmpname, Raster::avg);
 		hdr.writeDAT(tmpname, Raster::avg);

@@ -1,5 +1,5 @@
 /*
- * The purpose of this program is to import a DEM and perform simple statistical and 
+ * The purpose of this program is to import a DEM and perform simple statistical and
  * geospatial analysis. The program requires the following inputs:
  * 		1) Input filename (excluding extension)
  *
@@ -28,7 +28,7 @@
  * 			envi --> only outputs ENVI format raster
  *
  * 			both --> output both ascii and ENVI files
- * 
+ *
  * 	Example Usage:
  * 		program sample.txt 3 rel both
  * 					OR
@@ -49,11 +49,11 @@
 #include <string.h>
 #include <vector>
 
-// library with miscellaneous functions
-#include "misc_funct.hpp"
-
 // library with data structure objects
 #include "data_structures.hpp"
+
+// library with miscellaneous functions
+#include "misc_funct.hpp"
 
 using namespace std;
 
@@ -68,15 +68,13 @@ int main (){
 	//projection information
 	double utm_east, utm_north;
 	int utm_zone;
-	
+
 	//load in the parameters for the program
 	if (!prms.Initialize()) return false;
 
-//	cout << prms.iFile << endl;
-
 	//load in the header information from the input file (pulled from the Params info
 	if (!hdr.Initialize(prms.iFile)) return false;
-	
+
 	// based on the specified window size, determine the buffer radius
 	int buffer = (prms.iWindowSize-1)/2;
 
@@ -139,7 +137,7 @@ int main (){
 		// define variables for extraction
 		float shorelinex, dunetoex, dunecrestx, duneheelx, backbarrierx;
 		double shorelinez, dunetoez, dunecrestz, duneheelz, backbarrierz;
-		
+
 		// variables used to track feature position
 		float shoreline_pos = 0;
 		float dunetoe_pos = 0;
@@ -179,7 +177,7 @@ int main (){
 			else if(data.z[index1] > -100){
 				// compute relative relief
 				data.computeRelativeRelief(i, j, buffer, hdr);
-				
+
 				// set the landform indices to zero (i.e. edge of raster)
 				data.shoreline[index1] = 0;
 				data.dune_toe_line[index1] = 0;
@@ -494,7 +492,7 @@ int main (){
 	cout << "Writing out ENVI format products." << endl;
 
 	//write out the ENVI products specified
-	data.writeENVIs(prms.iFile, hdr, prms.iWindowSize);
-	
+	data.writeENVIs(prms.iFile, hdr, prms);
+
 	return 0;
 }
