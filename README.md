@@ -12,7 +12,7 @@ The purpose of this program is to:
 	2. extract beach, dune, and island landforms/features, and
 	3. compute landform morphometrics (i.e. height, width, volume).
 
-Relative relief (RR) of every pixel in the input DEM is first computed using a 2D moving window, where the window size is specified by the ```params_rr.ini``` file.
+Relative relief (RR) of every pixel in the input DEM is first computed \***using a 2D moving window**\*, where the window size is specified by the ```params_rr.ini``` file.
 
 ![Side profile (1D) profile of a transect through a 2D moving window](/images/Figure2.png)
 
