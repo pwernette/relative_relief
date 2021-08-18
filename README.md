@@ -6,10 +6,9 @@ This program implements the approach detailed in:
 
 ![Graphical abstract from *Geomorphology* paper](/images/featureextractiongraphicalabstract.png)
 
-## Compiling
+## Compiling the Program
 
 This code can be compiled as follows:
-
 ```
 g++ *.cpp -lm -O2 -o programname.exe
 ```
@@ -20,7 +19,7 @@ g++ *.cpp -lm -O2 -static -o programname.exe
 
 The second compiling option will create a static stand-alone program which may be transferred from one device to another while maintaining function. **NOTE: Compiling with** ```relative_relief.cpp``` **will not work since data_structures.cpp is not also compiled in the process.**
 
-## Purpose and Function
+## Program Function
 
 This program functions by (1) importing an ENVI format DEM (.dat and .h file), (2) computing relative relief across 3 spatial scales, and (3) (OPTIONAL) extracting beach, dune, and island landscape features, and computing landform morphometrics (i.e. height, width, volume) from these landscape features.
 
