@@ -42,14 +42,14 @@ Landform morphometrics (*i.e.* dune toe, dune crest, dune heel, and all addition
 1. **Input filename** (excluding extension)
 2. **Window Size**: This is the moving window diameter (*i.e.* kernel size) **in picxels** used to compute relative relief. Two additional scales of relative relief will also be computed by adding 2 to this user-specified window size.
 3. **Desired Output Product**:
-	- `rr` outputs relative relief rasters only
-	- `shoreline` outputs shoreline
-	- `dunetoe` outputs dune toe
-	- `dunecrest` outputs dune crest
-	- `duneheel` outputs dune heel
-	- `backbarrier` outputs backbarrier
-	- `landforms`: outputs all geomorphic feature parameters
-	- `all`: outputs all products
+	- `rr`: outputs relative relief rasters only
+	- `shoreline`: outputs shoreline
+	- `dunetoe`: outputs dune toe
+	- `dunecrest`: outputs dune crest
+	- `duneheel`: outputs dune heel
+	- `backbarrier`: outputs backbarrier
+	- `landforms`: outputs all landform rasters AND landform metrics table
+	- `all`: outputs all landform rasters, landform metrics table, AND relative relief rasters
 4. **Output Data Type(s)**:
 	- `ascii`: only outputs ascii file
 	- `envi`:  only outputs ENVI format raster
