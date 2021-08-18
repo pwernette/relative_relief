@@ -547,7 +547,7 @@ bool Raster::readDAT(string fn, Header hdr){
 }
 
 void Raster::writeENVIs(string filename, Header hdr, Params pm){
-	if(pm.oProduct.compare("shoreline")==0 || pm.oProduct.compare("all")==0){
+	if(pm.oProduct.compare("shoreline")==0 || pm.oProduct.compare("landforms")==0 || pm.oProduct.compare("all")==0){
 		///////////////
 		// SHORELINE //
 		///////////////
@@ -558,7 +558,7 @@ void Raster::writeENVIs(string filename, Header hdr, Params pm){
 		hdr.writeHDR(tmpname, Raster::shoreline);
 		hdr.writeDAT(tmpname, Raster::shoreline);
 	}
-	if(pm.oProduct.compare("dunetoe")==0 || pm.oProduct.compare("all")==0){
+	if(pm.oProduct.compare("dunetoe")==0 || pm.oProduct.compare("landforms")==0 || pm.oProduct.compare("all")==0){
 		//////////////
 		// DUNE TOE //
 		//////////////
@@ -569,7 +569,7 @@ void Raster::writeENVIs(string filename, Header hdr, Params pm){
 		hdr.writeHDR(tmpname, Raster::dune_toe_line);
 		hdr.writeDAT(tmpname, Raster::dune_toe_line);
 	}
-	if(pm.oProduct.compare("dunecrest")==0 || pm.oProduct.compare("all")==0){
+	if(pm.oProduct.compare("dunecrest")==0 || pm.oProduct.compare("landforms")==0 || pm.oProduct.compare("all")==0){
 		////////////////
 		// DUNE RIDGE //
 		////////////////
@@ -580,7 +580,7 @@ void Raster::writeENVIs(string filename, Header hdr, Params pm){
 		hdr.writeHDR(tmpname, Raster::dune_ridge_line);
 		hdr.writeDAT(tmpname, Raster::dune_ridge_line);
 	}
-	if(pm.oProduct.compare("duneheel")==0 || pm.oProduct.compare("all")==0){
+	if(pm.oProduct.compare("duneheel")==0 || pm.oProduct.compare("landforms")==0 || pm.oProduct.compare("all")==0){
 		///////////////
 		// DUNE HEEL //
 		///////////////
@@ -591,7 +591,7 @@ void Raster::writeENVIs(string filename, Header hdr, Params pm){
 		hdr.writeHDR(tmpname, Raster::dune_heel_line);
 		hdr.writeDAT(tmpname, Raster::dune_heel_line);
 	}
-	if(pm.oProduct.compare("backbarrier")==0 || pm.oProduct.compare("all")==0){
+	if(pm.oProduct.compare("backbarrier")==0 || pm.oProduct.compare("landforms")==0 || pm.oProduct.compare("all")==0){
 		///////////////////////////
 		// BACKBARRIER SHORELINE //
 		///////////////////////////

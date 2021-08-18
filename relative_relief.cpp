@@ -1,18 +1,16 @@
 /*
- * The purpose of this program is to import a DEM and perform simple statistical and
- * geospatial analysis. The program requires the following inputs:
+ * The purpose of this program is to import a DEM and perform simple statistical
+ * and geospatial analysis. The program requires the following inputs:
  * 		1) Input filename (excluding extension)
  *
  * 		2) window size to calculate statistics
  *
  * 		3) desired product:
- * 			dem --> outputs the raw DEM (can only be used with "envi" and "both" output data types)
- *
- * 			rr --> outputs relative relief 1 (window size + 0)
- * 			rr1 --> outputs relative relief 2 (window size + 1)
- * 			rr2 --> outputs relative relief 3 (window size + 2)
- * 			avgrr --> outputs average relative relief
- *			rrs --> outputs all relative relief products (including averag rr)
+ * 			rr --> outputs relative relief at 3 scales:
+ * 							initial window size
+ *							initial window size + 2
+ *							initial window size + 4
+ *							average relative relief of all 3 scales
  *
  * 			shoreline --> outputs shoreline
  * 			dunetoe --> outputs dune toe
@@ -30,9 +28,9 @@
  * 			both --> output both ascii and ENVI files
  *
  * 	Example Usage:
- * 		program sample.txt 3 rel both
- * 					OR
- * 		program.exe npilidar.txt 13 all both
+ * 		program.exe sample_ENVI_raster_filename 25 all both
+ *		program.exe sample_ENVI_raster_filename 11 rr envi
+ * 		program.exe sample_ENVI_raster_filename 3 landforms both
  *
  * This program assumes that the grid resolution is relatively small, and therefore
  * a simple pythagorean theorem distance is appropriate when calculating metrics.
@@ -489,10 +487,11 @@ int main (){
 	/////////////////////////////////////////////////////
 	// output ENVI format rasters (if requested by user input)
 	/////////////////////////////////////////////////////
-	cout << "Writing out ENVI format products." << endl;
+	if(prms.oFormat.compare("envi")==0 || prms.oFormat.compare("both")==0){
+		cout << "Writing out ENVI format products." << endl;
 
-	//write out the ENVI products specified
-	data.writeENVIs(prms.iFile, hdr, prms);
-
+		//write out the ENVI products specified
+		data.writeENVIs(prms.iFile, hdr, prms);
+	}
 	return 0;
 }
