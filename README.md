@@ -40,23 +40,21 @@ Landform morphometrics (*i.e.* dune toe, dune crest, dune heel, and all addition
 
 ## Inputs
 
-The program requires the following inputs:
-
-	- Input filename (excluding extension)
-	- window size to calculate statistics
-	- desired product:
-		rr --> outputs relative relief rasters only
-		shoreline --> outputs shoreline
-		dunetoe --> outputs dune toe
-		dunecrest --> outputs dune crest
-		duneheel --> outputs dune heel
-		backbarrier --> outputs backbarrier
-		landforms --> outputs all geomorphic feature parameters
-		all --> outputs all products
-	- output data types:
-		ascii --> only outputs ascii file
-		envi --> only outputs ENVI format raster
-		both --> output both ascii and ENVI files
+1. **Input filename** (excluding extension)
+2. **Window Size**: This is the moving window diameter (*i.e.* kernel size) **in picxels** used to compute relative relief. Two additional scales of relative relief will also be computed by adding 2 to this user-specified window size.
+3. **Desired Output Product**:
+	- `rr` outputs relative relief rasters only
+	- `shoreline` outputs shoreline
+	- `dunetoe` outputs dune toe
+	- `dunecrest` outputs dune crest
+	- `duneheel` outputs dune heel
+	- `backbarrier` outputs backbarrier
+	- `landforms`: outputs all geomorphic feature parameters
+	- `all`: outputs all products
+4. **Output Data Type(s)**:
+	- `ascii`: only outputs ascii file
+	- `envi`:  only outputs ENVI format raster
+	- `both`: output both ascii and ENVI files
 
 
 ## Defaults
@@ -72,11 +70,14 @@ The default thresholds are as follows:
 Any of the default values can be changed by altering the ```params_rr.ini``` file that accompanies this program.
 
 ## Example Usage
-```
-program sample_ENVI_raster_filename 25 all both
+```program.exe sample_ENVI_raster_filename 25 all both```
+Read in sample_ENVI_raster_filename as a raster (if available in ENVI format raster), compute relative relief at 25m, 27m, and 29m (assuming the raster has a 1m cell size), and write out all relative relief products as individual rasters, landform metrics rasters, and landform metrics table.
 
-program.exe sample_ENVI_raster_filename 25 all both
-```
+```program.exe sample_ENVI_raster_filename 11 rr envi```
+Read in sample_ENVI_raster_filename as a raster (if available in ENVI format raster), compute relative relief at 11m, 13m, and 15m (assuming the raster has a 1m cell size), and write out all relative relief products as individual rasters.
+
+```program.exe sample_ENVI_raster_filename 3 landforms both```
+Read in sample_ENVI_raster_filename as a raster (if available in ENVI format raster), compute relative relief at 25m, 27m, and 29m (assuming the raster has a 1m cell size), and write out landform metrics rasters and landform metrics table.
 
 ## Questions and Feedback
 
