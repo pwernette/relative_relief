@@ -54,145 +54,148 @@ from "misc_funct.py" import *
 # MAIN PROGRAM
 # execute main() if script call
 if __name__ == '__main__':
-	Params prms;
-	Header hdr;
+	Params prms
+	Header hdr
+
+    # read in raster using rasterio
+    ifile = rio.open(Fname)
 
 	#indexing variables
-	register int i, j, k;
+	register int i, j, k
 
 	#projection information
-	double utm_east, utm_north;
-	int utm_zone;
+	double utm_east, utm_north
+	int utm_zone
 
 	#load in the parameters for the program
-	if (!prms.Initialize()) return false;
+	if (!prms.Initialize()) return false
 
 	#load in the header information from the input file (pulled from the Params info
-	if (!hdr.Initialize(prms.iFile)) return false;
+	if (!hdr.Initialize(prms.iFile)) return false
 
 	# based on the specified window size, determine the buffer radius
-	int buffer = (prms.iWindowSize-1)/2;
+	int buffer = (prms.iWindowSize-1)/2
 
 	# Import DEM as Raster object
-	Raster data;
-	data.Initialize(prms, hdr);
+	Raster data
+	data.Load(prms, hdr)
 
 	# Define threshold values
-	string shoreline_indicator, default_threshold_values;
+	string shoreline_indicator, default_threshold_values
 
 	# output ASCII file pointer
-	FILE *landforms_metrics;
+	FILE *landforms_metrics
 
 	############################
 	if(prms.oFormat.compare("ascii")==0 || prms.oFormat.compare("both")==0){
-		string ascii_outname = prms.iFile.substr(0, prms.iFile.find_last_of("."));
-		ascii_outname.append("_ISLAND_METRICS.csv");
+		string ascii_outname = prms.iFile.substr(0, prms.iFile.find_last_of("."))
+		ascii_outname.append("_ISLAND_METRICS.csv")
 
-		landforms_metrics = fopen(ascii_outname.c_str(), "w+");
+		landforms_metrics = fopen(ascii_outname.c_str(), "w+")
 		if(!landforms_metrics){
-			cout << "ERROR: Cannot write ascii data file: " << ascii_outname << endl;
-			exit(1);
+			cout << "ERROR: Cannot write ascii data file: " << ascii_outname << endl
+			exit(1)
 		} else{
-			cout << "Creating/writing ascii data file: " << ascii_outname << "\n" << endl;
+			cout << "Creating/writing ascii data file: " << ascii_outname << "\n" << endl
 		}
 
 		# write the hdr_info
-		(void) fprintf(landforms_metrics, "ycoordinate, ");
+		(void) fprintf(landforms_metrics, "ycoordinate, ")
 		if(prms.oProduct.compare("shoreline")==0){
-			(void) fprintf(landforms_metrics, "shorelineX, shorelineZ\n");
+			(void) fprintf(landforms_metrics, "shorelineX, shorelineZ\n")
 		}
 		if(prms.oProduct.compare("dunetoe")==0){
-			(void) fprintf(landforms_metrics, "dunetoeX, dunetoeZ\n");
+			(void) fprintf(landforms_metrics, "dunetoeX, dunetoeZ\n")
 		}
 		if(prms.oProduct.compare("dunecrest")==0){
-			(void) fprintf(landforms_metrics, "dunecrestX, dunecrestZ\n");
+			(void) fprintf(landforms_metrics, "dunecrestX, dunecrestZ\n")
 		}
 		if(prms.oProduct.compare("duneheel")==0){
-			(void) fprintf(landforms_metrics, "duneheelX, duneheelZ\n");
+			(void) fprintf(landforms_metrics, "duneheelX, duneheelZ\n")
 		}
 		if(prms.oProduct.compare("backbarrier")==0){
-			(void) fprintf(landforms_metrics, "backbarrierX, backbarrierZ\n");
+			(void) fprintf(landforms_metrics, "backbarrierX, backbarrierZ\n")
 		}
 		if(prms.oProduct.compare("landforms")==0 || prms.oProduct.compare("all")==0){
-			(void) fprintf(landforms_metrics, "shorelineX, shorelineZ, ");
-			(void) fprintf(landforms_metrics, "dunetoeX, dunetoeZ, ");
-			(void) fprintf(landforms_metrics, "dunecrestX, dunecrestZ, ");
-			(void) fprintf(landforms_metrics, "duneheelX, duneheelZ, ");
-			(void) fprintf(landforms_metrics, "backbarrierX, backbarrierZ, ");
-			(void) fprintf(landforms_metrics, "beach_width, beach_vol, dune_height, dune_vol, island_width, island_volume\n");
+			(void) fprintf(landforms_metrics, "shorelineX, shorelineZ, ")
+			(void) fprintf(landforms_metrics, "dunetoeX, dunetoeZ, ")
+			(void) fprintf(landforms_metrics, "dunecrestX, dunecrestZ, ")
+			(void) fprintf(landforms_metrics, "duneheelX, duneheelZ, ")
+			(void) fprintf(landforms_metrics, "backbarrierX, backbarrierZ, ")
+			(void) fprintf(landforms_metrics, "beach_width, beach_vol, dune_height, dune_vol, island_width, island_volume\n")
 		}
 	}
 	############################
-	cout << "Processing the input data" << endl;
+	cout << "Processing the input data" << endl
 
 	######################
 	# Calculate DEM STATISTICS
 	#####################/
-	for(i=0; i<hdr.nlines; ++i){
+	for(i=0 i<hdr.nlines ++i){
 		# define variables for extraction
-		float shorelinex, dunetoex, dunecrestx, duneheelx, backbarrierx;
-		double shorelinez, dunetoez, dunecrestz, duneheelz, backbarrierz;
+		float shorelinex, dunetoex, dunecrestx, duneheelx, backbarrierx
+		double shorelinez, dunetoez, dunecrestz, duneheelz, backbarrierz
 
 		# variables used to track feature position
-		float shoreline_pos = 0;
-		float dunetoe_pos = 0;
-		float dunecrest_pos = 0;
-		float duneheel_pos = 0;
-		float backbarrier_pos = 0;
+		float shoreline_pos = 0
+		float dunetoe_pos = 0
+		float dunecrest_pos = 0
+		float duneheel_pos = 0
+		float backbarrier_pos = 0
 
-		double beach_vol = 0;
-		double dune_vol = 0;
-		double island_vol = 0;
+		double beach_vol = 0
+		double dune_vol = 0
+		double island_vol = 0
 
-		int index1;			# indicies for analyzing the data
-		double ycoord = 0;
+		int index1			# indicies for analyzing the data
+		double ycoord = 0
 
-		#cout << i << " - " << hdr.nlines << endl;
+		#cout << i << " - " << hdr.nlines << endl
 
 		# Read through the row from Left to Right...
-		for(j=0; j<hdr.ncols; ++j){
-			index1 = (i*hdr.ncols)+j;
-			# cout << index1 << endl;
+		for(j=0 j<hdr.ncols ++j){
+			index1 = (i*hdr.ncols)+j
+			# cout << index1 << endl
 
 			# IF the center pixel is within the buffer distance to the image edge
 			if(i<buffer || i>hdr.nlines-buffer || j<buffer || j>hdr.ncols-buffer){
-				data.res[index1] = -9999;
-				data.res_plus1[index1] = -9999;
-				data.res_plus2[index1] = -9999;
-				data.avg[index1] = -9999;
+				data.res[index1] = -9999
+				data.res_plus1[index1] = -9999
+				data.res_plus2[index1] = -9999
+				data.avg[index1] = -9999
 
-				data.shoreline[index1] = 0;
-				data.dune_toe_line[index1] = 0;
-				data.dune_ridge_line[index1] = 0;
-				data.dune_heel_line[index1] = 0;
-				data.backbarrier_line[index1] = 0;
+				data.shoreline[index1] = 0
+				data.dune_toe_line[index1] = 0
+				data.dune_ridge_line[index1] = 0
+				data.dune_heel_line[index1] = 0
+				data.backbarrier_line[index1] = 0
 			}
 
 			# IF the center pixel is NOT NULL, then continue...
 			else if(data.z[index1] > -100){
 				# compute relative relief
-				data.computeRelativeRelief(i, j, buffer, hdr);
+				data.computeRelativeRelief(i, j, buffer, hdr)
 
 				# set the landform indices to zero (i.e. edge of raster)
-				data.shoreline[index1] = 0;
-				data.dune_toe_line[index1] = 0;
-				data.dune_ridge_line[index1] = 0;
-				data.dune_heel_line[index1] = 0;
-				data.backbarrier_line[index1] = 0;
+				data.shoreline[index1] = 0
+				data.dune_toe_line[index1] = 0
+				data.dune_ridge_line[index1] = 0
+				data.dune_heel_line[index1] = 0
+				data.backbarrier_line[index1] = 0
 			}
 
 			# IF the center pixel contains a NULL value, then set all the calculated attributes to NULL.
 			else{
-				data.res[index1] = -9999;
-				data.res_plus1[index1] = -9999;
-				data.res_plus2[index1] = -9999;
-				data.avg[index1] = -9999;
+				data.res[index1] = -9999
+				data.res_plus1[index1] = -9999
+				data.res_plus2[index1] = -9999
+				data.avg[index1] = -9999
 
-				data.shoreline[index1] = 0;
-				data.dune_toe_line[index1] = 0;
-				data.dune_ridge_line[index1] = 0;
-				data.dune_heel_line[index1] = 0;
-				data.backbarrier_line[index1] = 0;
+				data.shoreline[index1] = 0
+				data.dune_toe_line[index1] = 0
+				data.dune_ridge_line[index1] = 0
+				data.dune_heel_line[index1] = 0
+				data.backbarrier_line[index1] = 0
 			}
 		}
 
@@ -200,20 +203,20 @@ if __name__ == '__main__':
 		###########/
 		# extract SHORELINE
 		###########/
-		for(j=hdr.ncols; j>-1; --j){		# read RIGHT to LEFT starting at edge of the image
-			index1 = (i*hdr.ncols)+j;
+		for(j=hdr.ncols j>-1 --j){		# read RIGHT to LEFT starting at edge of the image
+			index1 = (i*hdr.ncols)+j
 
 			# IF the center pixel is within the limits of the image...
 			if(i>buffer && i<hdr.nlines-buffer && j>buffer+1 && j<hdr.ncols-buffer-1){
 				# search for a location along the transect where criteria is met
 				if(data.z[index1+1] < prms.tShoreline
 						&& data.z[index1] >= prms.tShoreline){
-					data.shoreline[index1] = 1;
-					shoreline_pos = j;
-					shorelinex = data.x[index1];
-					shorelinez = data.z[index1];
-					ycoord = data.y[index1];
-					break;
+					data.shoreline[index1] = 1
+					shoreline_pos = j
+					shorelinex = data.x[index1]
+					shorelinez = data.z[index1]
+					ycoord = data.y[index1]
+					break
 				} else{
 					############################
 					#  This block of code is VERY IMPORTANT because it
@@ -222,9 +225,9 @@ if __name__ == '__main__':
 					#	shoreline extracted, then the program will not
 					#	attempt to calculate any landform parameters
 					############################
-					shoreline_pos = 0;
-					shorelinex = 0;
-					shorelinez = -99999;
+					shoreline_pos = 0
+					shorelinex = 0
+					shorelinez = -99999
 				}
 			}
 		}
@@ -232,8 +235,8 @@ if __name__ == '__main__':
 		###########
 		# extract DUNE TOE
 		###########
-		for(j=shoreline_pos; j>-1; --j){		# read RIGHT to LEFT starting at shoreline
-			index1 = (i*hdr.ncols)+j;
+		for(j=shoreline_pos j>-1 --j){		# read RIGHT to LEFT starting at shoreline
+			index1 = (i*hdr.ncols)+j
 
 			# IF the center pixel is within the limits of the image...
 			if(i>buffer && i<hdr.nlines-buffer && j>buffer+1 && j<hdr.ncols-buffer-1
@@ -244,15 +247,15 @@ if __name__ == '__main__':
 				# search for a location along the transect where criteria is met
 				if(data.avg[index1+1] < prms.tDT
 						&& data.avg[index1] >= prms.tDT){
-					data.dune_toe_line[index1] = 1;
-					dunetoe_pos = j;
-					dunetoex = data.x[index1];
-					dunetoez = data.z[index1];
-					break;
+					data.dune_toe_line[index1] = 1
+					dunetoe_pos = j
+					dunetoex = data.x[index1]
+					dunetoez = data.z[index1]
+					break
 				} else{
-					dunetoe_pos = 0;
-					dunetoex = 0;
-					dunetoez = -99999;
+					dunetoe_pos = 0
+					dunetoex = 0
+					dunetoez = -99999
 				}
 			}
 		}
@@ -260,8 +263,8 @@ if __name__ == '__main__':
 		############
 		# extract DUNE CREST
 		############
-		for(j=dunetoe_pos; j>-1; --j){		# read RIGHT to LEFT starting at shoreline
-			index1 = (i*hdr.ncols)+j;
+		for(j=dunetoe_pos j>-1 --j){		# read RIGHT to LEFT starting at shoreline
+			index1 = (i*hdr.ncols)+j
 
 			# IF the center pixel is within the limits of the image...
 			if(i>buffer && i<hdr.nlines-buffer && j>buffer+1 && j<hdr.ncols-buffer-1 && j<dunetoe_pos){
@@ -277,15 +280,15 @@ if __name__ == '__main__':
 						&& (dunetoe_pos-j)*hdr.xres < prms.tCrestDistMax
 						# If pixel is higher than dune toe
 						&& dunetoez<data.z[index1]){
-					data.dune_ridge_line[index1] = 1;
-					dunecrest_pos = j;
-					dunecrestx = data.x[index1];
-					dunecrestz = data.z[index1];
-					break;
+					data.dune_ridge_line[index1] = 1
+					dunecrest_pos = j
+					dunecrestx = data.x[index1]
+					dunecrestz = data.z[index1]
+					break
 				} else{
-					dunecrest_pos = 0;
-					dunecrestx = 0;
-					dunecrestz = -99999;
+					dunecrest_pos = 0
+					dunecrestx = 0
+					dunecrestz = -99999
 				}
 			}
 		}
@@ -293,8 +296,8 @@ if __name__ == '__main__':
 		###########/
 		# extract DUNE HEEL
 		###########/
-		for(j=dunecrest_pos; j>-1; --j){		# read RIGHT to LEFT starting at shoreline
-			index1 = (i*hdr.ncols)+j;
+		for(j=dunecrest_pos j>-1 --j){		# read RIGHT to LEFT starting at shoreline
+			index1 = (i*hdr.ncols)+j
 
 			# IF the center pixel is within the limits of the image...
 			if(i>buffer && i<hdr.nlines-buffer && j>buffer+1 && j<hdr.ncols-buffer-1 && j<dunecrest_pos){
@@ -307,15 +310,15 @@ if __name__ == '__main__':
 						&& (dunecrest_pos-j)*hdr.xres > prms.tHeelDistMin
 						# if pixel is less than maximum distance back from the dune crest
 						&& (dunecrest_pos-j)*hdr.xres < prms.tHeelDistMax){
-					data.dune_heel_line[index1] = 1;
-					duneheel_pos = j;
-					duneheelx = data.x[index1];
-					duneheelz = data.z[index1];
-					break;
+					data.dune_heel_line[index1] = 1
+					duneheel_pos = j
+					duneheelx = data.x[index1]
+					duneheelz = data.z[index1]
+					break
 				} else{
-					duneheel_pos = 0;
-					duneheelx = 0;
-					duneheelz = -99999;
+					duneheel_pos = 0
+					duneheelx = 0
+					duneheelz = -99999
 				}
 			}
 		}
@@ -323,35 +326,35 @@ if __name__ == '__main__':
 		##############/
 		# extract BACKBARRIER EDGE
 		##############/
-		int backstart;
+		int backstart
 		if(duneheel_pos!=0){
-			backstart = duneheel_pos;
+			backstart = duneheel_pos
 		} else if(dunecrest_pos!=0){
-			backstart = dunecrest_pos;
+			backstart = dunecrest_pos
 		} else if(dunetoe_pos!=0){
-			backstart = dunetoe_pos;
+			backstart = dunetoe_pos
 		} else{
-			backstart = shoreline_pos;
+			backstart = shoreline_pos
 		}
 
-		for(j=backstart; j>-1; --j){		# read RIGHT to LEFT starting at shoreline
-			index1 = (i*hdr.ncols)+j;
+		for(j=backstart j>-1 --j){		# read RIGHT to LEFT starting at shoreline
+			index1 = (i*hdr.ncols)+j
 
 			# IF the center pixel is within the limits of the image...
 			if(i>buffer && i<hdr.nlines-buffer && j>buffer+1 && j<hdr.ncols-buffer-1){
-				#cout << j << " - " << index1 << " - " << data[index1-1].z << endl;
+				#cout << j << " - " << index1 << " - " << data[index1-1].z << endl
 				if(data.z[index1-1] < prms.tBB
 						&& data.z[index1] >= prms.tBB
 						&& data.z[index1]!=-9999){
-					data.backbarrier_line[index1] = 1;
-					backbarrier_pos = j;
-					backbarrierx = data.x[index1];
-					backbarrierz = data.z[index1];
-					break;
+					data.backbarrier_line[index1] = 1
+					backbarrier_pos = j
+					backbarrierx = data.x[index1]
+					backbarrierz = data.z[index1]
+					break
 				} else{
-					backbarrier_pos = 0;
-					backbarrierx = 0;
-					backbarrierz = -99999;
+					backbarrier_pos = 0
+					backbarrierx = 0
+					backbarrierz = -99999
 				}
 			}
 		}
@@ -359,9 +362,9 @@ if __name__ == '__main__':
 		###########
 		# calculate VOLUMES
 		###########
-		for(j=hdr.ncols; j>-1; --j){		# read RIGHT to LEFT starting at shoreline
-			index1 = (i*hdr.ncols)+j;
-			int a = 0;
+		for(j=hdr.ncols j>-1 --j){		# read RIGHT to LEFT starting at shoreline
+			index1 = (i*hdr.ncols)+j
+			int a = 0
 			#############/
 			# calculate BEACH VOLUME
 			#############/
@@ -370,10 +373,10 @@ if __name__ == '__main__':
 					&& dunetoe_pos!=0
 					&& data.z[index1]>=prms.tShoreline){
 				if(a<=(shorelinex-dunetoex)*hdr.xres){
-					beach_vol += (data.z[index1]-prms.tShoreline)*hdr.xres*hdr.yres;
+					beach_vol += (data.z[index1]-prms.tShoreline)*hdr.xres*hdr.yres
 				}
 			} else{
-				beach_vol += 0;
+				beach_vol += 0
 			}
 
 			#############/
@@ -384,9 +387,9 @@ if __name__ == '__main__':
 					&& j>=duneheel_pos
 					&& duneheel_pos!=0
 					&& data.z[index1]>=prms.tShoreline){
-				dune_vol += (data.z[index1]-prms.tShoreline)*hdr.xres*hdr.yres;
+				dune_vol += (data.z[index1]-prms.tShoreline)*hdr.xres*hdr.yres
 			} else{
-				dune_vol += 0;
+				dune_vol += 0
 			}
 
 			#############/
@@ -398,9 +401,9 @@ if __name__ == '__main__':
 					&& backbarrierz!=-99999
 					&& shoreline_pos!=0
 					&& data.z[index1]>=prms.tShoreline){
-				island_vol += (data.z[index1]-prms.tShoreline)*hdr.xres*hdr.yres;
+				island_vol += (data.z[index1]-prms.tShoreline)*hdr.xres*hdr.yres
 			} else{
-				island_vol += 0;
+				island_vol += 0
 			}
 		}
 
@@ -410,81 +413,81 @@ if __name__ == '__main__':
 		if(prms.oFormat.compare("ascii")==0 || prms.oFormat.compare("both")==0){
 			# write out the desired products to the ascii file
 			if(prms.oProduct.compare("shoreline")==0 && shorelinez>=hdr.zmin && shorelinex>hdr.ulx && shorelinex<=hdr.xmax){
-				(void) fprintf(landforms_metrics, "%lf.10, %lf.10, %lf.10\n", (i*hdr.yres)+hdr.ulx, (float)shorelinex, (float)shorelinez);
+				(void) fprintf(landforms_metrics, "%lf.10, %lf.10, %lf.10\n", (i*hdr.yres)+hdr.ulx, (float)shorelinex, (float)shorelinez)
 			}
 			if(prms.oProduct.compare("dunetoe")==0 && dunetoez>=hdr.zmin && dunetoex>hdr.ulx && dunetoex<hdr.xmax){
-				(void) fprintf(landforms_metrics, "%lf.10, %lf.10, %lf.10\n", (i*hdr.yres)+hdr.ulx, (float)dunetoex, (float)dunetoez);
+				(void) fprintf(landforms_metrics, "%lf.10, %lf.10, %lf.10\n", (i*hdr.yres)+hdr.ulx, (float)dunetoex, (float)dunetoez)
 			}
 			if(prms.oProduct.compare("dunecrest")==0 && dunecrestz>=hdr.zmin && dunecrestx>hdr.ulx && dunecrestx<hdr.xmax){
-				(void) fprintf(landforms_metrics, "%lf.10, %lf.10, %lf.10\n", (i*hdr.yres)+hdr.ulx, (float)dunecrestx, (float)dunecrestz);
+				(void) fprintf(landforms_metrics, "%lf.10, %lf.10, %lf.10\n", (i*hdr.yres)+hdr.ulx, (float)dunecrestx, (float)dunecrestz)
 			}
 			if(prms.oProduct.compare("duneheel")==0 && duneheelz>=hdr.zmin && duneheelx>hdr.ulx && duneheelx<hdr.xmax){
-				(void) fprintf(landforms_metrics, "%lf.10, %lf.10, %lf.10\n", (i*hdr.yres)+hdr.ulx, (float)duneheelx, (float)duneheelz);
+				(void) fprintf(landforms_metrics, "%lf.10, %lf.10, %lf.10\n", (i*hdr.yres)+hdr.ulx, (float)duneheelx, (float)duneheelz)
 			}
 			if(prms.oProduct.compare("backbarrier")==0 && backbarrierz>=hdr.zmin && backbarrierx>=hdr.ulx && backbarrierx<hdr.xmax){
-				(void) fprintf(landforms_metrics, "%lf.10, %lf.10, %lf.10\n", (i*hdr.yres)+hdr.ulx, (float)backbarrierx, (float)backbarrierz);
+				(void) fprintf(landforms_metrics, "%lf.10, %lf.10, %lf.10\n", (i*hdr.yres)+hdr.ulx, (float)backbarrierx, (float)backbarrierz)
 			}
 			if((prms.oProduct.compare("landforms")==0 || prms.oProduct.compare("all")==0) && ycoord!=0){
-					double dh, bw, iw;
+					double dh, bw, iw
 
 					# check against negative dune elevations
 					if((dunecrestz-dunetoez)>0 && (dunecrestz-dunetoez)<300){
-						dh = dunecrestz-dunetoez;
+						dh = dunecrestz-dunetoez
 					} else{
-						dh = -99999;
+						dh = -99999
 					}
 
 					if(beach_vol <= 0){
-						beach_vol = -99999;
+						beach_vol = -99999
 					}
 					if(dune_vol <= 0){
-						dune_vol = -99999;
+						dune_vol = -99999
 					}
 					if(island_vol <= 0){
-						island_vol = -99999;
+						island_vol = -99999
 					}
 
 					if((shorelinex-dunetoex)*hdr.xres>=0){
-						bw = (shorelinex-dunetoex)*hdr.xres;
+						bw = (shorelinex-dunetoex)*hdr.xres
 					} else{
-						bw = -99999;
+						bw = -99999
 					}
 
 					if((shorelinex-backbarrierx)*hdr.xres>0){
-						iw = (shorelinex-backbarrierx)*hdr.xres;
+						iw = (shorelinex-backbarrierx)*hdr.xres
 					} else{
-						iw = -99999;
+						iw = -99999
 					}
 
-					(void) fprintf(landforms_metrics, "%lf.10, ", (float)ycoord);
-					(void) fprintf(landforms_metrics, "%lf.10, %lf.10, ", (float)shorelinex, (float)shorelinez);
-					(void) fprintf(landforms_metrics, "%lf.10, %lf.10, ", (float)dunetoex, (float)dunetoez);
-					(void) fprintf(landforms_metrics, "%lf.10, %lf.10, ", (float)dunecrestx, (float)dunecrestz);
-					(void) fprintf(landforms_metrics, "%lf.10, %lf.10, ", (float)duneheelx, (float)duneheelz);
-					(void) fprintf(landforms_metrics, "%lf.10, %lf.10, ", (float)backbarrierx, (float)backbarrierz);
+					(void) fprintf(landforms_metrics, "%lf.10, ", (float)ycoord)
+					(void) fprintf(landforms_metrics, "%lf.10, %lf.10, ", (float)shorelinex, (float)shorelinez)
+					(void) fprintf(landforms_metrics, "%lf.10, %lf.10, ", (float)dunetoex, (float)dunetoez)
+					(void) fprintf(landforms_metrics, "%lf.10, %lf.10, ", (float)dunecrestx, (float)dunecrestz)
+					(void) fprintf(landforms_metrics, "%lf.10, %lf.10, ", (float)duneheelx, (float)duneheelz)
+					(void) fprintf(landforms_metrics, "%lf.10, %lf.10, ", (float)backbarrierx, (float)backbarrierz)
 					(void) fprintf(landforms_metrics, "%lf.10, %lf.10, %lf.10, %lf.10, %lf.10, %lf.10\n",
 						(float)bw,
 						(float)beach_vol,
 						(float)dh,
 						(float)dune_vol,
 						(float)iw,
-						(float)island_vol);
+						(float)island_vol)
 			}
 		}
 	}
 
-	cout << "   Processing successful!\n" << endl;
+	cout << "   Processing successful!\n" << endl
 
 	if(prms.oFormat.compare("ascii")==0 || prms.oFormat.compare("both")==0){
 		# close the output ascii file
-		fclose(landforms_metrics);
-		cout << "Successfully wrote landform metrics to CSV file." << endl;
+		fclose(landforms_metrics)
+		cout << "Successfully wrote landform metrics to CSV file." << endl
 	}
 
 	##########################/
 	# output ENVI format rasters (if requested by user input)
 	##########################/
-	cout << "Writing out ENVI format products." << endl;
+	cout << "Writing out ENVI format products." << endl
 
 	#write out the ENVI products specified
-	data.writeENVIs(prms.iFile, hdr, prms);
+	data.writeENVIs(prms.iFile, hdr, prms)
