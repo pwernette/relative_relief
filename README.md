@@ -8,34 +8,21 @@ This program implements the approach detailed in:
 
 ## Compiling the Program
 
-This code can be compiled as follows:
+If compiling this program on a **linux OS** or **unix OS**, you do not need to include the ".exe" suffix at the end of the output program name and can compile the program using either of the following options:
+```
+g++ *.cpp -lm -O2 -o programname
+g++ *.cpp -lm -O2 -static -o programname
+```
+
+If compiling this program on a **Windows OS**, make sure to include the ".exe" suffix at the end of the output program name. For example, `programname.exe`.
 ```
 g++ *.cpp -lm -O2 -o programname.exe
-```
-or
-```
 g++ *.cpp -lm -O2 -static -o programname.exe
 ```
 
-The second compiling option will create a static stand-alone program which may be transferred from one device to another while maintaining function. **NOTE: Compiling with** ```relative_relief.cpp``` **will not work since data_structures.cpp is not also compiled in the process.**
+Including the `-static` flag during compilation will ensure that everything required for the program is wrapped into a single executable that can be moved from one computer to another and still function properly. If this flag is not included, then the resulting executable may not function properly or at all when moving computers.
 
-## Program Function
-
-This program functions by (1) importing an ENVI format DEM (.dat and .h file), (2) computing relative relief across 3 spatial scales, and (3) (OPTIONAL) extracting beach, dune, and island landscape features, and computing landform morphometrics (i.e. height, width, volume) from these landscape features.
-
-Relative relief (RR) of every pixel in the input DEM is first computed \***using a 2D moving window**\*, where the window size is specified by the ```params_rr.ini``` file.
-
-![Side profile (1D) profile of a transect through a 2D moving window](/images/Figure2.png)
-
-The 2D window size will significant affect the ability to extract different landform morphometrics and subsequent landforms.
-
-![Effect of 2D moving window size on relative relief values](/images/Figure3withDI.png)
-
-Landform morphometrics (*i.e.* dune toe, dune crest, dune heel, and all additional derivatives) are extracted along transects of the 2D computed relative relief values.
-
-![Planview map of where landform morphometrics from this paper](/images/Figure5.png)
-
-![Profile view of where landform morphometrics from this paper align with other approaches](/images/Figure6.png)
+**NOTE: Compiling with** ```relative_relief.cpp``` **will not work since data_structures.cpp is not also compiled in the process.**
 
 ## Inputs
 
@@ -68,15 +55,31 @@ The default thresholds are as follows:
 
 Any of the default values can be changed by altering the ```params_rr.ini``` file that accompanies this program.
 
-## Example Usage
-```program.exe sample_ENVI_raster_filename 25 all both```
-Read in sample_ENVI_raster_filename as a raster (if available in ENVI format raster), compute relative relief at 25m, 27m, and 29m (assuming the raster has a 1m cell size), and write out all relative relief products as individual rasters, landform metrics rasters, and landform metrics table.
+## Usage
+To run the program:
+1. Make sure you have successfully compiled the program. If you are on a Windows OS, you will need to specify the executable as a .exe file during compilation. Otherwise, with unix and linux systems, the ".exe" suffix is not required.
+2. Place a copy of the `params_rr.ini` file in the same directory on your local machine as the ENVI format rasters you wish to analyze.
+3. Update the `params_rr.ini` file with the correct information (i.e. filename, initial kernel size, thresholds, desired output products and format, etc) for analysis.
+4. Open a terminal window and mavigate to the directory with your .ini file and rasters.
+5. Run the executable you created when you compiled the program.
 
-```program.exe sample_ENVI_raster_filename 11 rr envi```
-Read in sample_ENVI_raster_filename as a raster (if available in ENVI format raster), compute relative relief at 11m, 13m, and 15m (assuming the raster has a 1m cell size), and write out all relative relief products as individual rasters.
+## Program Function
 
-```program.exe sample_ENVI_raster_filename 3 landforms both```
-Read in sample_ENVI_raster_filename as a raster (if available in ENVI format raster), compute relative relief at 25m, 27m, and 29m (assuming the raster has a 1m cell size), and write out landform metrics rasters and landform metrics table.
+This program functions by (1) importing an ENVI format DEM (.dat and .h file), (2) computing relative relief across 3 spatial scales, and (3) (OPTIONAL) extracting beach, dune, and island landscape features, and computing landform morphometrics (i.e. height, width, volume) from these landscape features.
+
+Relative relief (RR) of every pixel in the input DEM is first computed \***using a 2D moving window**\*, where the window size is specified by the ```params_rr.ini``` file.
+
+![Side profile (1D) profile of a transect through a 2D moving window](/images/Figure2.png)
+
+The 2D window size will significant affect the ability to extract different landform morphometrics and subsequent landforms.
+
+![Effect of 2D moving window size on relative relief values](/images/Figure3withDI.png)
+
+Landform morphometrics (*i.e.* dune toe, dune crest, dune heel, and all additional derivatives) are extracted along transects of the 2D computed relative relief values.
+
+![Planview map of where landform morphometrics from this paper](/images/Figure5.png)
+
+![Profile view of where landform morphometrics from this paper align with other approaches](/images/Figure6.png)
 
 ## Questions and Feedback
 
