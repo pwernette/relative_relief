@@ -107,6 +107,9 @@ class Params
 	float tCrestDistMax;
 	float tHeelDistMin;
 	float tHeelDistMax;
+	
+	// transect direction
+	string transect_direction;
 
 	bool Initialize()
 	{

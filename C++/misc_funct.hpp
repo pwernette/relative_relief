@@ -17,7 +17,7 @@ void Raster::computeRelativeRelief(int i, int j, int buf, Header hdr){
 	float z1 = 0;
 	vector<float> tmp;
 
-	// iterate through all pixels in Raster object
+	// iterate through all pixels in the specified window size
 	for(a=buf; a<(buf+9); ++a){
 		float z_min = Raster::z[index];
 		float z_max = Raster::z[index];
@@ -45,10 +45,11 @@ void Raster::computeRelativeRelief(int i, int j, int buf, Header hdr){
 			}
 		}
 
+		// add the relative relief value to the data structure
 		tmp.push_back((Raster::z[index] - z_min)/(z_max - z_min));
 		Raster::res[index] = tmp[0];
 	}
 
-
+	// compute the average relative relief for all 3 scales
 	Raster::avg[index] = accumulate(tmp.begin(), tmp.end(), 0.0)/tmp.size();
 }

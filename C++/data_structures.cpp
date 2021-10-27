@@ -58,6 +58,8 @@ bool Params::LoadInParameters(const char* iFileName)
   grab >> tHeelDistMin;
   grab >> ParamDescription;
   grab >> tHeelDistMax;
+  grab >> ParamDescription;
+  grab >> transect_direction;
 
   return true;
 };
