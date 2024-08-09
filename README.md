@@ -95,8 +95,8 @@ Landform morphometrics (*i.e.* dune toe, dune crest, dune heel, and all addition
 
 ## Questions and Feedback
 
-This program was developed by Phil Wernette as part of his PhD Thesis from 2017 ("Assessing the Role of Framework Geology on Barrier Island Geomorphology") and *Geomorphology* paper from 2016 (Wernette, P., C. Houser, and M.P. Bishop. (2016) An automated approach for extracting barrier island morphology from digital elevation models. Geomorphology, 262(1), 1-7. http://doi.org/10.1016/j.geomorph.2016.02.024.)
+This program was developed by Phillipe Wernette as part of his PhD Thesis from 2017 ("Assessing the Role of Framework Geology on Barrier Island Geomorphology") and *Geomorphology* paper from 2016 (Wernette, P., C. Houser, and M.P. Bishop. (2016) An automated approach for extracting barrier island morphology from digital elevation models. Geomorphology, 262(1), 1-7. http://doi.org/10.1016/j.geomorph.2016.02.024.)
 
 For questions related to this program, please contact:
 
-Phil Wernette [pwernette@usgs.gov]()
+Phil Wernette [pwernett@mtu.edu]()
